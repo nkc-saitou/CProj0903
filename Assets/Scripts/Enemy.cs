@@ -3,36 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using CProj;
 
-public class Bullet : MonoBehaviour
+public class Enemy : MonoBehaviour
 {
-    const float MOVE_SPEED = 12.0f;
+    const float MOVE_SPEED = 2.0f;
 
-    public Material[]  bulletMaterials;
-    public ScandalType Type { get; private set; }
+    public ScandalType type;
 
     Transform transformCache;
-    Vector3   moveDir = Vector3.zero;
+    Vector3 moveDir = Vector3.zero;
 
     //=====================================================
 	void Start ()
     {
         transformCache = transform;
-        Destroy(this.gameObject, 1.0f);
 	}
 	void Update ()
     {
         Move();
 	}
     //-----------------------------------------------------
-    //  球のタイプ変更
-    //-----------------------------------------------------
-    public void SelectType(ScandalType type)
-    {
-        Type = type;
-        GetComponent<MeshRenderer>().material = bulletMaterials[(int)type];
-    }
-    //-----------------------------------------------------
-    //  球の進む方向
+    //  進む方向
     //-----------------------------------------------------
     public void SetMoveDirection(Vector3 dir)
     {
@@ -44,5 +34,17 @@ public class Bullet : MonoBehaviour
     void Move()
     {
         transformCache.position += moveDir * MOVE_SPEED * Time.deltaTime;
+    }
+    //-----------------------------------------------------
+    //  当たり判定
+    //-----------------------------------------------------
+    void OnTriggerEnter(Collider coll)
+    {
+        if( coll.tag == "Bullet" && 
+            coll.GetComponent<Bullet>().Type == type)
+        {
+            Destroy(coll.gameObject);
+            Destroy(gameObject);
+        }
     }
 }

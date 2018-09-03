@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CProj;
 
 public class Shot : MonoBehaviour
 {
@@ -15,13 +16,13 @@ public class Shot : MonoBehaviour
 	}
 	void Update ()
     {
-        if (Input.GetMouseButtonDown(0)) BulletShot(Bullet.BulletType.Woman);
-        else if (Input.GetMouseButtonDown(1)) BulletShot(Bullet.BulletType.Money);
+        if (Input.GetMouseButtonDown(0)) BulletShot(ScandalType.Woman);
+        else if (Input.GetMouseButtonDown(1)) BulletShot(ScandalType.Money);
 	}
     //-----------------------------------------------------
     //  球を飛ばす
     //-----------------------------------------------------
-    void BulletShot(Bullet.BulletType type)
+    void BulletShot(ScandalType type)
     {
         // 球のタイプ
         Bullet bullet = Instantiate(bulletPre, transformCache.position, Quaternion.identity);
