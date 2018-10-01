@@ -7,12 +7,14 @@ public class EnemyCreator : MonoBehaviour
     public Transform target;
     public Enemy[] enemyPreList;
 
+    int   createCount;
     float createTimer;
     float createInterval;
 
     //=====================================================
     void Start ()
     {
+        createCount = 0;
         createTimer = 0;
         createInterval = 1.0f;
     }
@@ -31,11 +33,11 @@ public class EnemyCreator : MonoBehaviour
     void CreateEnemy()
     {
         Vector3 createPos = RandomPosition();
-        Vector3 moveDir = target.position - createPos;
-        moveDir.y = 0;
+        int num = Random.Range(0, 2);
+        Enemy enemy = Instantiate(enemyPreList[num], createPos, enemyPreList[num].transform.rotation);
+        enemy.SetMoveDirection(GetMoveDirection(createPos));
 
-        Enemy enemy = Instantiate(enemyPreList[Random.Range(0, 2)], createPos, Quaternion.identity);
-        enemy.SetMoveDirection(moveDir.normalized);
+        AddCount();
     }
     //-----------------------------------------------------
     //  生成位置の決定
@@ -54,5 +56,20 @@ public class EnemyCreator : MonoBehaviour
             pos.z = Random.Range(target.position.z, 5.0f);
         }
         return pos;
+    }
+    //-----------------------------------------------------
+    //  移動方向の計算
+    //-----------------------------------------------------
+    Vector3 GetMoveDirection(Vector3 pos)
+    {
+        return Vector3.Scale((target.position - pos), new Vector3(1, 0, 1)).normalized;
+    }
+    //-----------------------------------------------------
+    //  敵生成数のカウント
+    //-----------------------------------------------------
+    void AddCount()
+    {
+        createCount++;
+        if (createCount % 5 == 0) createInterval = Mathf.Max(createInterval - 0.05f, 0.2f);
     }
 }

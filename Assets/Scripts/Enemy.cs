@@ -43,6 +43,7 @@ public class Enemy : MonoBehaviour
         if( coll.tag == "Bullet" && 
             coll.GetComponent<Bullet>().Type == type)
         {
+            ScoreManager.instance.AddScore(1);
             Destroy(coll.gameObject);
             Destroy(gameObject);
         }
